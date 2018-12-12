@@ -1,0 +1,161 @@
+---
+title: "Lab 4"
+author: "Rubin Oleg"
+date: '13 декабря 2018 г '
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+```
+
+## R Markdown
+
+
+```{r}
+#Пользуясь примером из лекции файл (5.0.R) проанализируйте данные
+#о возрасте и физ. характеристиках молюсков
+#https://archive.ics.uci.edu/ml/datasets/abalone
+data <- read.csv("https://archive.ics.uci.edu/ml/machine-learning-databases/abalone/abalone.data", header=TRUE, sep=",")
+summary(data)
+colnames(data)
+colnames(data) <- c("sex", "length", "diameter", "height", 
+                "whole_weight", "shucked_weight",
+                "viscera_weight", "shell_weight", "rings")
+
+colnames(data)
+data$sex <- factor(c("Female", "Infant", "Male")[data$sex])
+par(mfrow=c(1,3)) 
+hist(data$diameter, main = "Диаметр, мм")
+hist(data$height, main = "Высота, мм")
+hist(data$whole_weight, main = "Полный вес, гр")
+#Видим ассиметрию https://en.wikipedia.org/wiki/Skewness
+#и выбросы (от них нужно избавиться)
+```
+
+## Построим линейные модели (посредством функции lm)
+
+```{r}
+lm.1 <- lm(data$diameter ~ data$whole_weight)
+summary(lm.1)
+plot(lm.1)
+```
+
+```{r}
+lm.2 <- lm(data$height ~ data$whole_weight)
+summary(lm.2)
+plot(lm.2)
+```
+
+```{r}
+lm.4 <- lm(data$whole_weight ~ ., data = data)
+summary(lm.4)
+plot(lm.4)
+```
+
+## Избавимся от выбросов посредством функции filter из пакета dplyr
+
+```{r}
+data.raw <- data
+data <- data %>% filter(height > 0.08 & height < 0.18) %>% filter(diameter >= 0.26 & diameter < 0.52) %>% filter(whole_weight > 0.20 & whole_weight < 1.4)
+```
+
+## Построим линейные модели уже без выбросов (также посредством функции lm)
+
+```{r}
+lm.1.good <- lm(data$diameter ~ data$whole_weight)
+summary(lm.1.good)
+plot(lm.1.good)
+```
+
+```{r}
+lm.2.good <- lm(data$height ~ data$whole_weight)
+summary(lm.2.good)
+plot(lm.2.good)
+```
+
+```{r}
+lm.4.good <- lm(data$whole_weight ~ ., data = data)
+summary(lm.4.good)
+plot(lm.4.good)
+```
+
+# Проверка моделей
+```{r}
+delimeters <- seq(1, nrow(data.raw), by=2)
+even.rows <- data.raw[delimeters,]
+uneven.rows <- data.raw[-delimeters,]
+```
+
+## Модели с выбросами
+
+### Первая модель
+```{r}
+even.lm.1 <- lm(even.rows$diameter ~ even.rows$whole_weight)
+summary(even.lm.1)
+```
+
+```{r}
+even.weight.1 <- predict(even.lm.1)
+cor(even.rows$whole_weight, even.weight.1)
+plot(even.rows$whole_weight, even.weight.1)
+```
+
+```{r}
+even.weight.out.1 <- predict(even.lm.1, uneven.rows)
+cor(uneven.rows$whole_weight, even.weight.out.1)
+plot(uneven.rows$whole_weight, even.weight.out.1)
+```
+
+#### Вывод
+Прогноз 1-ой модели плохой - 0.75 < 0.95
+
+### Вторая модель
+```{r}
+even.lm.2 <- lm(even.rows$height ~ even.rows$whole_weight)
+summary(even.lm.2)
+```
+
+```{r}
+even.weight.2 <- predict(even.lm.2)
+cor(even.rows$whole_weight, even.weight.2)
+plot(even.rows$whole_weight, even.weight.2)
+```
+
+```{r}
+even.weight.out.2 <- predict(even.lm.2, uneven.rows)
+cor(uneven.rows$whole_weight, even.weight.out.2)
+plot(uneven.rows$whole_weight, even.weight.out.2)
+```
+
+#### Вывод
+Прогноз 2-ой модели плохой - 0.75 < 0.95.
+
+### Четвёртая модель
+```{r}
+even.lm.4 <- lm(even.rows$whole_weight ~ . - even.rows$whole_weight, data = even.rows)
+summary(even.lm.4)
+```
+
+```{r}
+even.weight.4 <- predict(even.lm.4)
+cor(even.rows$whole_weight, even.weight.4)
+plot(even.rows$whole_weight, even.weight.4)
+```
+
+```{r}
+even.weight.out.4 <- predict(even.lm.4, uneven.rows)
+cor(uneven.rows$whole_weight, even.weight.out.4)
+plot(uneven.rows$whole_weight, even.weight.out.4)
+```
+
+Прогноз 4-ой модели хороший - 0.99 > 0.95.
+
+
+
+
+
+
+
+
