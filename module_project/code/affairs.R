@@ -29,15 +29,15 @@ predictions <- predict(fit.lda, validation)
 x1 <- rnorm(100)
 x2 <- runif(100)
 
-labelGender <- "Âûáåðèòå ïîë Âàøåãî ïàðòíåðà:"
-labelAge <- "Ââåäèòå âîçðàñò Âàøåãî ïàðòíåðà:"
-labelYM <- "Ñêîëüêî ïîëíûõ ëåò Âû â áðàêå?"
-labelKids <- "Äåòè ó Âàñ åñòü?"
-labelReligion <- "Íàñêîëüêî Âàø ïàðòíåð ðåëèãèîçíûé (îò 1 äî 5)?"
-labelEdu <- "Ñêîëüêî ëåò Âàø ïàðòíåð ó÷èëñÿ?"
+labelGender <- "Ð’Ñ‹Ð±ÐµÑ€Ð¸Ñ‚Ðµ Ð¿Ð¾Ð» Ð’Ð°ÑˆÐµÐ³Ð¾ Ð¿Ð°Ñ€Ñ‚Ð½ÐµÑ€Ð°:"
+labelAge <- "Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ Ð²Ð¾Ð·Ñ€Ð°ÑÑ‚ Ð’Ð°ÑˆÐµÐ³Ð¾ Ð¿Ð°Ñ€Ñ‚Ð½ÐµÑ€Ð°:"
+labelYM <- "Ð¡ÐºÐ¾Ð»ÑŒÐºÐ¾ Ð¿Ð¾Ð»Ð½Ñ‹Ñ… Ð»ÐµÑ‚ Ð’Ñ‹ Ð² Ð±Ñ€Ð°ÐºÐµ?"
+labelKids <- "Ð”ÐµÑ‚Ð¸ Ñƒ Ð’Ð°Ñ ÐµÑÑ‚ÑŒ?"
+labelReligion <- "ÐÐ°ÑÐºÐ¾Ð»ÑŒÐºÐ¾ Ð’Ð°Ñˆ Ð¿Ð°Ñ€Ñ‚Ð½ÐµÑ€ Ñ€ÐµÐ»Ð¸Ð³Ð¸Ð¾Ð·Ð½Ñ‹Ð¹ (Ð¾Ñ‚ 1 Ð´Ð¾ 5)?"
+labelEdu <- "Ð¡ÐºÐ¾Ð»ÑŒÐºÐ¾ Ð»ÐµÑ‚ Ð’Ð°Ñˆ Ð¿Ð°Ñ€Ñ‚Ð½ÐµÑ€ ÑƒÑ‡Ð¸Ð»ÑÑ?"
 labelOccupation <- "occupation"
-labelRating <- "Âî ñêîëüêî Âàø ïàðòíåð îöåíèâàåò áðàê (îò 1 äî 5)?"
-labelP <- "Ðåçóëüòàò:"
+labelRating <- "Ð’Ð¾ ÑÐºÐ¾Ð»ÑŒÐºÐ¾ Ð’Ð°Ñˆ Ð¿Ð°Ñ€Ñ‚Ð½ÐµÑ€ Ð¾Ñ†ÐµÐ½Ð¸Ð²Ð°ÐµÑ‚ Ð±Ñ€Ð°Ðº (Ð¾Ñ‚ 1 Ð´Ð¾ 5)?"
+labelP <- "Ð ÐµÐ·ÑƒÐ»ÑŒÑ‚Ð°Ñ‚:"
 
 #Choices for comboboxes
 choicesGender <- c("male", "female")
@@ -48,33 +48,33 @@ createKsTestGwidgets <- function()
 {
   library(gWidgetstcltk)
   options(guiToolkit = "tcltk")
-  win <- gwindow("Îïðåäåëèòü èçìåíó â áðàêå", visible = FALSE)
+  win <- gwindow("ÐžÐ¿Ñ€ÐµÐ´ÐµÐ»Ð¸Ñ‚ÑŒ Ð¸Ð·Ð¼ÐµÐ½Ñƒ Ð² Ð±Ñ€Ð°ÐºÐµ", visible = FALSE)
   
   #TODO: SET PRETTY ICON
   #img <- gdkPixbufNewFromFile("C:/Users/olegr/icon.ico")
   #getToolkitWidget(win)$setIcon(img);
   
-  frmGender <- gframe("Ïîë", container = win)
+  frmGender <- gframe("ÐŸÐ¾Ð»", container = win)
   lblGender <- glabel(labelGender, container = frmGender)
   cmbGender <- gcombobox(choicesGender, container = frmGender)
   
-  frmAge <- gframe("Âîçðàñò", container = win)
+  frmAge <- gframe("Ð’Ð¾Ð·Ñ€Ð°ÑÑ‚", container = win)
   lblAge <- glabel(labelAge, container = frmAge)
   txtAge <- gedit(container = frmAge)
   
-  frmYM <- gframe("Ëåò â áðàêå", container = win)
+  frmYM <- gframe("Ð›ÐµÑ‚ Ð² Ð±Ñ€Ð°ÐºÐµ", container = win)
   lblYM <- glabel(labelYM, container = frmYM)
   txtYM <- gedit(container = frmYM)
   
-  frmKids <- gframe("Äåòè", container = win)
+  frmKids <- gframe("Ð”ÐµÑ‚Ð¸", container = win)
   lblKids <- glabel(labelKids, container = frmKids)
   cmbKids <- gcombobox(choicesKids, container = frmKids)
   
-  frmReligion <- gframe("Ðåëèãèÿ", container = win)
+  frmReligion <- gframe("Ð ÐµÐ»Ð¸Ð³Ð¸Ñ", container = win)
   lblReligion <- glabel(labelReligion, container = frmReligion)
   cmbReligion <- gcombobox(choicesFromOneToFive, container = frmReligion)
   
-  frmEdu <- gframe("Ó÷åáà", container = win)
+  frmEdu <- gframe("Ð£Ñ‡ÐµÐ±Ð°", container = win)
   lblEdu <- glabel(labelEdu, container = frmEdu)
   txtEdu <- gedit(container = frmEdu)
   
@@ -82,11 +82,11 @@ createKsTestGwidgets <- function()
   lblOcc <- glabel(labelOccupation, container = frmOcc)
   txtOcc <- gedit(container = frmOcc)
   
-  frmRating <- gframe("Îöåíêà", container = win)
+  frmRating <- gframe("ÐžÑ†ÐµÐ½ÐºÐ°", container = win)
   lblRating <- glabel(labelRating, container = frmRating)
   cmbRating <- gcombobox(choicesFromOneToFive, container = frmRating)
   
-  btnCalc <- gbutton("Ìíå èçìåíÿþò?", container = win,
+  btnCalc <- gbutton("ÐœÐ½Ðµ Ð¸Ð·Ð¼ÐµÐ½ÑÑŽÑ‚?", container = win,
                      handler = function(h, ...)
                      {
                        gender <- svalue(cmbGender)
